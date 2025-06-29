@@ -14,3 +14,6 @@ wheels/
 
 #Media files (Attachments)
 media/
+
+#sqlite3 database
+db.sqlite3
