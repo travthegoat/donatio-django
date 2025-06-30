@@ -52,9 +52,12 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     
     "django_filters",
+    'django_cleanup.apps.CleanupConfig',
     
     # My Apps
     'accounts.apps.AccountsConfig',
+    'attachments',
+    'organizations',
 ]
 
 SITE_ID = 1
