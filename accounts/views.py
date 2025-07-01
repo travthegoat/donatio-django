@@ -25,6 +25,9 @@ class UserViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_staff']
     
+    def update(self, request, *args, **kwargs):
+        return Response({ "detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
     @action(detail=False, methods=['get', 'put'], url_path='me')
     def current_user(self, request):
         # Return the current authenticated user
@@ -41,23 +44,29 @@ class UserViewSet(ModelViewSet):
             if not serializer.is_valid():
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-            if serializer.validated_data.get('profile_picture'):
+            if request.FILES.get('profile_picture'):
                 try:
                     # Delete all existing attachments
                     profile.attachments.all().delete()
                     
                     # Create new attachment
+                    profile_picture = request.FILES.get('profile_picture')
+                    if not profile_picture:
+                        return Response({
+                            'error': 'No profile picture file provided'
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                    
                     attachment = Attachment.objects.create(
-                        content_type=Profile,
-                    
-                        object_id=profile.id,
-                        file=serializer.validated_data.get('profile_picture')
+                        content_object=profile,
+                        file=profile_picture
                     )
-                    
-                    serializer.validated_data.pop('profile_picture')
+                except ValueError as e:
+                    return Response({
+                        'error': f'Invalid file format: {str(e)}'
+                    }, status=status.HTTP_400_BAD_REQUEST)
                 except Exception as e:
                     return Response({
-                        'error': 'Failed to create profile picture attachment'
+                        'error': f'Failed to create profile picture attachment: {str(e)}'
                     }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             try:
@@ -68,5 +77,7 @@ class UserViewSet(ModelViewSet):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        
         
         

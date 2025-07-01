@@ -12,7 +12,7 @@ class GoogleLoginSerializer(SocialLoginSerializer):
         return super().validate(attrs)
     
 class ProfileSerializer(serializers.ModelSerializer):
-    profile_picture = serializers.SerializerMethodField()
+    profile_picture = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
