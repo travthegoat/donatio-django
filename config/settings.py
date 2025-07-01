@@ -30,6 +30,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,7 +59,10 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'attachments',
     'organizations',
+    "chat",
 ]
+
+ASGI_APPLICATION = "config.asgi.application"
 
 SITE_ID = 1
 
@@ -222,4 +226,10 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
 }

@@ -2,6 +2,7 @@ from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 from .models import User, Profile
+from attachments.models import Attachment
 
 class GoogleLoginSerializer(SocialLoginSerializer):
     def validate(self, attrs):
@@ -11,9 +12,17 @@ class GoogleLoginSerializer(SocialLoginSerializer):
         return super().validate(attrs)
     
 class ProfileSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.SerializerMethodField()
+
     class Meta:
         model = Profile
-        fields = ['full_name', 'phone_number']
+        fields = ['full_name', 'phone_number', 'profile_picture']
+
+    def get_profile_picture(self, obj):
+        attachment = obj.attachments.first()
+        if attachment and attachment.file:
+            return attachment.file.url
+        return None
     
 class CustomUserDetailsSerializer(UserDetailsSerializer):   
     profile = ProfileSerializer(read_only=True)
