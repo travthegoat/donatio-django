@@ -12,10 +12,10 @@ class ChatViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'delete']
     
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action == 'list':
             return [permissions.IsAuthenticated()]
         
-        return [permissions.IsAuthenticated, IsChatOwner]
+        return [permissions.IsAuthenticated(), IsChatOwner()]
     
     def get_queryset(self):
         if self.action == 'list':
