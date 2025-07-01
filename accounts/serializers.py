@@ -16,7 +16,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['full_name', 'phone_number', 'profile_picture']
+        fields = ['id', 'full_name', 'phone_number', 'profile_picture']
 
     def get_profile_picture(self, obj):
         attachment = obj.attachments.first()
