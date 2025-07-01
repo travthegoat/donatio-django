@@ -12,11 +12,11 @@ class GoogleLoginSerializer(SocialLoginSerializer):
         return super().validate(attrs)
     
 class ProfileSerializer(serializers.ModelSerializer):
-    profile_picture = serializers.SerializerMethodField()
+    profile_picture = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
-        fields = ['full_name', 'phone_number', 'profile_picture']
+        fields = ['id', 'full_name', 'phone_number', 'profile_picture']
 
     def get_profile_picture(self, obj):
         attachment = obj.attachments.first()

@@ -20,10 +20,13 @@ class GoogleLogin(SocialLoginView):
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserDetailsSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'put']
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_staff']
+    
+    def update(self, request, *args, **kwargs):
+        return Response({ "detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
     @action(detail=False, methods=['get', 'put'], url_path='me')
     def current_user(self, request):
@@ -38,19 +41,41 @@ class UserViewSet(ModelViewSet):
             profile = get_object_or_404(Profile, user=request.user)
             
             serializer = ProfileSerializer(profile, data=request.data)
-            serializer.is_valid(raise_exception=True)
+            if not serializer.is_valid():
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-            if serializer.validated_data.get('profile_picture'):
-                # Delete all the existing profile picture
-                profile.attachments.all().delete()
-                
-                Attachment.objects.create(
-                    content_object=profile,
-                    file=serializer.validated_data.get('profile_picture')
-                )
-                
-                serializer.validated_data.pop('profile_picture')
+            if request.FILES.get('profile_picture'):
+                try:
+                    # Delete all existing attachments
+                    profile.attachments.all().delete()
+                    
+                    # Create new attachment
+                    profile_picture = request.FILES.get('profile_picture')
+                    if not profile_picture:
+                        return Response({
+                            'error': 'No profile picture file provided'
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                    
+                    attachment = Attachment.objects.create(
+                        content_object=profile,
+                        file=profile_picture
+                    )
+                except ValueError as e:
+                    return Response({
+                        'error': f'Invalid file format: {str(e)}'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                except Exception as e:
+                    return Response({
+                        'error': f'Failed to create profile picture attachment: {str(e)}'
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            serializer.save()
-        
+            try:
+                serializer.save()
+            except Exception as e:
+                return Response({
+                    'error': 'Failed to save profile'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         
