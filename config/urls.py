@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import GoogleLogin
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,6 +28,9 @@ urlpatterns = [
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/auth/google", GoogleLogin.as_view()),
     path("api/auth/", include('accounts.urls')),
+    path("api/", include('organizations.urls')),
+    path("api-token-auth/", obtain_auth_token),
+    path("api-auth/", include('rest_framework.urls')),
     path("api/", include("chat.urls"))
 ]
 
