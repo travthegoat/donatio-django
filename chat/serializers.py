@@ -10,8 +10,12 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = "__all__"
 
-
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatMessage
         fields = "__all__"
+
+class UpdateChatMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatMessage
+        fields = ['content']

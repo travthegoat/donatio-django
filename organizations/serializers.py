@@ -8,12 +8,10 @@ from django.db import transaction
 
 User = get_user_model()
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email"]
-
 
 class CreateOrganizationRequestSerializer(serializers.ModelSerializer):
     attachments = serializers.ListField(
@@ -53,7 +51,10 @@ class UpdateOrganizationRequestSerializer(serializers.ModelSerializer):
 class OrganizationRequestSerializer(serializers.ModelSerializer):
     submitted_by = UserSerializer(read_only=True)
     approved_by = UserSerializer(read_only=True)
-    attachments = SimpleAttachmentSerializer(read_only=True, many=True)
+    attachments = serializers.SerializerMethodField(read_only=True)
+
+    def get_attachments(self, obj):
+        return SimpleAttachmentSerializer(obj.attachments.all(), many=True).data
 
     class Meta:
         model = OrganizationRequest
@@ -78,8 +79,12 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     organization_request = OrganizationRequestSerializer(read_only=True)
     organization_request_id = serializers.PrimaryKeyRelatedField(
-        queryset=OrganizationRequest.objects.all(), source=""
+        queryset=OrganizationRequest.objects.all(), source="organization_request"
     )
+    attachments = serializers.SerializerMethodField(read_only=True)
+
+    def get_attachments(self, obj):
+        return SimpleAttachmentSerializer(obj.attachments.all(), many=True).data
 
     class Meta:
         model = Organization
@@ -87,7 +92,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
             "id",
             "admin",
             "admin_id",
-            "organization_name",
+            "name",
             "description",
             "phone_number",
             "email",

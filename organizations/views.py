@@ -15,7 +15,6 @@ from .permissions import IsAdminOrOrgAdmin
 from .constants import OrganizationRequestStatus
 from rest_framework.parsers import MultiPartParser, FormParser
 
-
 class OrganizationRequestViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
     queryset = OrganizationRequest.objects.all().order_by("-created_at")
@@ -49,6 +48,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all().order_by("-created_at")
     serializer_class = OrganizationSerializer
     permission_classes = [IsAuthenticated, IsAdminOrOrgAdmin]
+    http_method_names = ['get', 'put', 'patch', 'delete']
 
     filter_backends = [
         DjangoFilterBackend,
@@ -56,22 +56,5 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
     filterset_fields = ["admin__username", "organization_request__status"]
-    search_fields = ["organization_name"]
-    ordering_fields = ["created_at", "organization_name"]
-
-    def perform_create(self, serializer):
-        organization_request = serializer.validated_data.get("organization_request")
-        if (
-            organization_request
-            and organization_request.status != OrganizationRequestStatus.APPROVED
-        ):
-            raise serializers.ValidationError(
-                {
-                    "organization_request": "The linked organization request must be approved."
-                }
-            )
-
-        if not serializer.validated_data.get("admin") and self.request.user.is_staff:
-            serializer.save(admin=self.request.user)
-        else:
-            serializer.save()
+    search_fields = ["name"]
+    ordering_fields = ["created_at", "name"]
