@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from chat.models import Chat
 from chat.serializers import ChatSerializer
+from organizations.paginations import CommonPagination
 
 from .models import OrganizationRequest, Organization
 from .serializers import (
@@ -25,6 +26,7 @@ class OrganizationRequestViewSet(viewsets.ModelViewSet):
     queryset = OrganizationRequest.objects.all().order_by("-created_at")
     serializer_class = OrganizationRequestSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+    pagination_class = CommonPagination
     filter_backend = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["status", "submitted_by__username"]
     search_fields = ["organization_name"]
@@ -53,6 +55,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all().order_by("-created_at")
     serializer_class = OrganizationSerializer
     permission_classes = [IsAuthenticated, IsAdminOrOrgAdmin]
+    pagination_class = CommonPagination
     http_method_names = ['get', 'put', 'patch', 'delete']
 
     filter_backends = [
