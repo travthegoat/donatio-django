@@ -7,6 +7,7 @@ from .constants import OrganizationRequestStatus
 # When an organization request is approved, create an organization
 @receiver(post_save, sender=OrganizationRequest)
 def create_organization(sender, instance, created, **kwargs):
+    print("In Signal")
     if created:
         print("OrganizationRequest created")
         return
@@ -22,6 +23,7 @@ def create_organization(sender, instance, created, **kwargs):
             organization_request=instance,
             admin=instance.submitted_by,
             name=instance.organization_name,
+            type=instance.type,
         )
         print("Organization created")
     else:
