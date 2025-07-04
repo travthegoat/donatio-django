@@ -19,6 +19,8 @@ from .serializers import (
 from .permissions import IsAdminOrOrgAdmin, IsOrgAdmin
 from .constants import OrganizationRequestStatus
 from rest_framework.parsers import MultiPartParser, FormParser
+from attachments.models import Attachment
+
 
 class OrganizationRequestViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
@@ -48,7 +50,6 @@ class OrganizationRequestViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save(approved_by=self.request.user, approved_at=timezone.now())
 
-
 class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all().order_by("-created_at")
     serializer_class = OrganizationSerializer
@@ -64,6 +65,16 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["created_at", "name"]
     
+    def perform_update(self, serializer):
+        #Organization has more than one attachment in attachments field
+        if serializer.validated_data.get("attachments"):
+            #Check if there are old 
+            if serializer.validated_data["attachments"]:
+                #Delete old linked attachments of the organization
+                Attachment.objects.filter(organization=serializer.instance).delete()
+            
+        return super().perform_update(serializer)
+
 class OrganizationChatViewSet(viewsets.ModelViewSet):
     serializer_class = ChatSerializer
     permission_classes = [IsAuthenticated, IsOrgAdmin]
@@ -95,4 +106,4 @@ class OrganizationChatViewSet(viewsets.ModelViewSet):
             "created": created,
             "chat_id": chat.id
         }, status=status.HTTP_200_OK)
-        
+      
