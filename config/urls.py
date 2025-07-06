@@ -32,6 +32,7 @@ urlpatterns = [
     path("api-token-auth/", obtain_auth_token),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("chat.urls")),
+    path("api/", include("events.urls"))
 ]
 
 if settings.DEBUG:

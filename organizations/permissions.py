@@ -1,5 +1,5 @@
 from rest_framework import permissions
-
+from organizations.models import Organization
 
 class IsAdminOrSubmittedBy(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -49,5 +49,5 @@ class IsAdminOrOrgAdmin(permissions.BasePermission):
     
 class IsOrgAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        organization = request.kwargs.get("organization_id")
+        organization = view.kwargs.get("organization_id")
         return Organization.objects.get(id=organization).admin == request.user

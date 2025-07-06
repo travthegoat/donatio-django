@@ -68,6 +68,7 @@ class OrganizationRequestSerializer(serializers.ModelSerializer):
             "id",
             "organization_name",
             "status",
+            "type",
             "submitted_by",
             "approved_by",
             "approved_at",
