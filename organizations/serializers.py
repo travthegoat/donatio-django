@@ -93,6 +93,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         required=False,
         allow_empty=True,
     )
+    organization_request = OrganizationRequestSerializer(read_only=True)
 
     def get_attachments(self, obj):
         return SimpleAttachmentSerializer(obj.attachments.all(), many=True).data
@@ -108,6 +109,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
             "description",
             "phone_number",
             "email",
+            "organization_request",
             "additional_info",
             "created_at",
             "updated_at",

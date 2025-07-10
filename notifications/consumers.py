@@ -6,7 +6,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         # Allow only authenticated users
         self.user = self.scope["user"]
         if self.user.is_anonymous:
-            await self.close(code=4001)
+            await self.close(code=401)
             return        
         
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
