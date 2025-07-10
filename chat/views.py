@@ -13,6 +13,7 @@ from .permissions import IsChatOwner, IsMessageOwner
 class ChatViewSet(viewsets.ModelViewSet):
     serializer_class = ChatSerializer
     http_method_names = ["get", "delete"]
+    pagination_class = None
 
     def get_permissions(self):
         if self.action == "list":
