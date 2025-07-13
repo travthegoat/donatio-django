@@ -5,8 +5,6 @@ from organizations.models import Organization
 from transactions.models import Transaction
 from attachments.models import Attachment
 
-
-
 class Activity(BaseModel, AttachableModel):
     organization = models.ForeignKey(
         Organization,
