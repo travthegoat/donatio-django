@@ -18,7 +18,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "organization",
-            "donor",
+            "actor",
             "event",
             "title",
             "amount",
@@ -33,7 +33,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "organization",
-            "donor",
+            "actor",
             "status",
             "uploaded_attachments",
             "attachments",
@@ -58,19 +58,26 @@ class TransactionSerializer(serializers.ModelSerializer):
         return transaction
 
     def validate(self, attrs):
-        # If the transaction is a disbursement and the event is not None, raise an error
-        if (attrs["type"] == TransactionType.DISBURSEMENT) and (
-            attrs["event"] is not None
-        ):
-            raise serializers.ValidationError(
-                "Disbursement transaction cannot be associated with an event"
-            )
+        actor = self.context.get("actor")
+        organization = self.context.get("organization")
 
-        # If the transaction is a donation and the title is not set, set the title to the donor's username and the amount
-        if (attrs["type"] == TransactionType.DONATION) and (attrs["title"] is None):
-            attrs["title"] = f"{attrs['donor'].username} donated {attrs['amount']}"
+        if attrs["type"] == TransactionType.DISBURSEMENT:
+            if organization.admin != actor:
+                raise serializers.ValidationError("You are not authorized to create disbursement transactions for this organization.")
+
+            if attrs.get("event") is not None:
+                raise serializers.ValidationError("Disbursement transactions cannot be associated with an event.")
+
+            title = attrs.get("title")
+            if not title or title.strip() == "":
+                raise serializers.ValidationError("Title is required for disbursements.")
+
+        elif attrs["type"] == TransactionType.DONATION:
+            if not organization.kpay_qr_url or not organization.phone_number:
+                raise serializers.ValidationError("Organization is not set up properly yet to accept donations.")
 
         return super().validate(attrs)
+
 
 
 class UpdateTransactionSerializer(serializers.ModelSerializer):
@@ -86,7 +93,7 @@ class UpdateTransactionSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "organization",
-            "donor",
+            "actor",
             "event",
             "title",
             "amount",
@@ -99,7 +106,7 @@ class UpdateTransactionSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "organization",
-            "donor",
+            "actor",
             "event",
             "amount",
             "type",
