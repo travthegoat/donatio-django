@@ -25,6 +25,11 @@ class ActivityDetailSerializer(serializers.ModelSerializer):
     organization = SimpleOrganizationSerializer(read_only=True)
     activity_transactions = ActivityTransactionSerializer(source='transaction_links', many=True, read_only=True)
     attachments = SimpleAttachmentSerializer(many=True, read_only=True)
+    uploaded_attachments = serializers.ListField(
+        child=serializers.FileField(),
+        write_only=True,
+        required=True,
+    )
     transaction_ids = serializers.ListField(
         child=serializers.UUIDField(),
         write_only=True,
@@ -44,7 +49,8 @@ class ActivityDetailSerializer(serializers.ModelSerializer):
             'updated_at',
             'activity_transactions',
             'attachments',
-            'transaction_ids'
+            'transaction_ids',
+            'uploaded_attachments'
         ]
         read_only_fields = ['created_at', 'updated_at', 'activity_transactions', 'attachments', 'organization']
         
