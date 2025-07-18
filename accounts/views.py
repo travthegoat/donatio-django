@@ -12,7 +12,6 @@ from attachments.models import Attachment
 from .serializers import CustomUserDetailsSerializer
 from django.shortcuts import get_object_or_404
 
-
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
     client_class = OAuth2Client

@@ -204,7 +204,8 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 
 class SimpleOrganizationSerializer(serializers.ModelSerializer):
+    attachments = SimpleAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Organization
-        fields = ["id", "admin", "name"]
+        fields = ["id", "admin", "name", "attachments"]
