@@ -2,6 +2,7 @@ import json
 from channels.consumer import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from datetime import datetime
+from django.utils import timezone
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -71,14 +72,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         sender_type = event["sender_type"]
         sender_id = event["sender_id"]
-
         await self.send(
             text_data=json.dumps(
                 {
                     "message": message,
                     "sender_type": sender_type,
                     "sender_id": sender_id,
-                    "timestamp": datetime.now(),
+                    "timestamp": timezone.now(),
                 }
             )
         )
