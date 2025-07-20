@@ -78,7 +78,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "message": message,
                     "sender_type": sender_type,
                     "sender_id": sender_id,
-                    "timestamp": timezone.now(),
+                    "timestamp": timezone.now().isoformat(),
                 }
             )
         )
