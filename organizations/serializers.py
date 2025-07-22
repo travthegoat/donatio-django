@@ -7,6 +7,7 @@ from .constants import OrganizationRequestStatus
 from attachments.serializers import SimpleAttachmentSerializer
 from attachments.models import Attachment
 from transactions.constants import TransactionType
+from .utils import extract_qr_url
 
 User = get_user_model()
 
@@ -149,13 +150,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "attachments",
+            "kpay_qr_image",
             "uploaded_attachments",
             "stats"
         ]
-        read_only_fields = ["name", "type", "created_at", "updated_at", "stats"]
+        read_only_fields = ["name", "type", "created_at", "updated_at", "stats", "kpay_qr_url"]
 
     def update(self, instance, validated_data):
         attachments_data = validated_data.pop("uploaded_attachments", [])
+        qr_code_file = validated_data.get("kpay_qr_image", None)
 
         with transaction.atomic():
             # Update all other fields on the instance
@@ -172,6 +175,12 @@ class OrganizationSerializer(serializers.ModelSerializer):
                         Attachment.objects.create(
                             content_object=instance, file=file
                         )
+                        
+            if qr_code_file:
+                print("hello")
+                qr_code_url = extract_qr_url(qr_code_file)
+                print(qr_code_url)
+                instance.kpay_qr_url = qr_code_url
 
             instance.save()
 
