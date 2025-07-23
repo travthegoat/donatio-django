@@ -33,14 +33,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         chat = await database_sync_to_async(Chat.objects.get)(id=room_name)
 
-        if sender_type == SenderType.DONOR:
-            donor = await database_sync_to_async(User.objects.get)(id=sender_id)
-            organization = None
-        else:
+        if sender_type == SenderType.ORGANIZATION:
             organization = await database_sync_to_async(Organization.objects.get)(
                 id=sender_id
             )
             donor = None
+        else:
+            donor = await database_sync_to_async(User.objects.get)(id=sender_id)
+            organization = None
 
         await database_sync_to_async(ChatMessage.objects.create)(
             chat=chat,
