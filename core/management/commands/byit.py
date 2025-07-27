@@ -67,6 +67,8 @@ class Command(BaseCommand):
                 organization_request=org_request
             )
             
+            self.create_attachments(org, os.path.join(os.getcwd(), "core", "data", "example.png"))
+            
             ### Create Donations ###
             for donation in entry.get('donations', []):
                 tx = Transaction.objects.create(

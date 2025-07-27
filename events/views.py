@@ -42,6 +42,8 @@ class EventListViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ["get"]
+    filter_backends = [SearchFilter]
+    search_fields = ["title"]
 
     def get_queryset(self):
         if self.action == "list":
