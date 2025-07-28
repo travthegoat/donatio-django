@@ -1,12 +1,14 @@
-from django.db.models import Sum
-from django.db import transaction
 from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Sum
 from rest_framework import serializers, status
-from .models import OrganizationRequest, Organization
-from .constants import OrganizationRequestStatus
-from attachments.serializers import SimpleAttachmentSerializer
+
 from attachments.models import Attachment
-from transactions.constants import TransactionType, TransactionStatus
+from attachments.serializers import SimpleAttachmentSerializer
+from transactions.constants import TransactionStatus, TransactionType
+
+from .constants import OrganizationRequestStatus
+from .models import Organization, OrganizationRequest
 from .utils import extract_qr_url
 
 User = get_user_model()
@@ -91,22 +93,24 @@ class OrganizationStatsSerializer(serializers.ModelSerializer):
     total_received_money = serializers.SerializerMethodField(read_only=True)
     total_expense = serializers.SerializerMethodField(read_only=True)
     total_current_balance = serializers.SerializerMethodField(read_only=True)
-    
+
     class Meta:
         model = Organization
         fields = ["total_received_money", "total_expense", "total_current_balance"]
 
     def get_total_received_money(self, obj):
         return (
-            obj.transactions.filter(type=TransactionType.DONATION)
-            .aggregate(total=Sum("amount"))["total"]
+            obj.transactions.filter(type=TransactionType.DONATION).aggregate(
+                total=Sum("amount")
+            )["total"]
             or 0
         )
 
     def get_total_expense(self, obj):
         return (
-            obj.transactions.filter(type=TransactionType.DISBURSEMENT)
-            .aggregate(total=Sum("amount"))["total"]
+            obj.transactions.filter(type=TransactionType.DISBURSEMENT).aggregate(
+                total=Sum("amount")
+            )["total"]
             or 0
         )
 
@@ -129,18 +133,27 @@ class OrganizationSerializer(serializers.ModelSerializer):
     stats = serializers.SerializerMethodField(read_only=True)
     total_donations = serializers.SerializerMethodField(read_only=True)
     total_donors = serializers.SerializerMethodField(read_only=True)
-    
+
     def get_stats(self, obj):
         return OrganizationStatsSerializer(obj).data
-    
+
     def get_attachments(self, obj):
         return SimpleAttachmentSerializer(obj.attachments.all(), many=True).data
 
     def get_total_donors(self, obj):
-        return obj.transactions.filter(type=TransactionType.DONATION, status=TransactionStatus.APPROVED).values("actor").distinct().count()
-    
+        return (
+            obj.transactions.filter(
+                type=TransactionType.DONATION, status=TransactionStatus.APPROVED
+            )
+            .values("actor")
+            .distinct()
+            .count()
+        )
+
     def get_total_donations(self, obj):
-        return obj.transactions.filter(type=TransactionType.DONATION, status=TransactionStatus.APPROVED).count()
+        return obj.transactions.filter(
+            type=TransactionType.DONATION, status=TransactionStatus.APPROVED
+        ).count()
 
     class Meta:
         model = Organization
@@ -164,7 +177,14 @@ class OrganizationSerializer(serializers.ModelSerializer):
             "total_donations",
             "total_donors",
         ]
-        read_only_fields = ["name", "type", "created_at", "updated_at", "stats", "kpay_qr_url"]
+        read_only_fields = [
+            "name",
+            "type",
+            "created_at",
+            "updated_at",
+            "stats",
+            "kpay_qr_url",
+        ]
 
     def update(self, instance, validated_data):
         attachments_data = validated_data.pop("uploaded_attachments", [])
@@ -182,10 +202,8 @@ class OrganizationSerializer(serializers.ModelSerializer):
                 # Loop for first 2 attachments
                 for file in attachments_data[:2]:
                     if file:
-                        Attachment.objects.create(
-                            content_object=instance, file=file
-                        )
-                        
+                        Attachment.objects.create(content_object=instance, file=file)
+
             if qr_code_file:
                 print("hello")
                 qr_code_url = extract_qr_url(qr_code_file)

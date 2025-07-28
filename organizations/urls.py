@@ -1,9 +1,14 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework_nested import routers
 
-from events.views import EventViewSet
 from activities.views import ActivityViewSet
-from .views import OrganizationRequestViewSet, OrganizationViewSet, OrganizationChatViewSet
+from events.views import EventViewSet
+
+from .views import (
+    OrganizationChatViewSet,
+    OrganizationRequestViewSet,
+    OrganizationViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register(
@@ -20,9 +25,7 @@ organization_router = routers.NestedDefaultRouter(
 organization_router.register(
     r"chats", OrganizationChatViewSet, basename="organization-chats"
 )
-organization_router.register(
-    r"events", EventViewSet, basename="organization-events"
-)
+organization_router.register(r"events", EventViewSet, basename="organization-events")
 organization_router.register(
     r"activities", ActivityViewSet, basename="organization-activities"
 )

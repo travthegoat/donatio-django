@@ -1,16 +1,22 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
-from .serializers import GoogleLoginSerializer, ProfileSerializer
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import permissions, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django_filters.rest_framework import DjangoFilterBackend
-from .models import User, Profile
-from attachments.models import Attachment
-from .serializers import CustomUserDetailsSerializer
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
+from attachments.models import Attachment
+
+from .models import Profile, User
+from .serializers import (
+    CustomUserDetailsSerializer,
+    GoogleLoginSerializer,
+    ProfileSerializer,
+)
+
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter

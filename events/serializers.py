@@ -1,10 +1,11 @@
-from rest_framework import serializers
-from events.models import Event
-from organizations.serializers import SimpleOrganizationSerializer
-from attachments.serializers import SimpleAttachmentSerializer
-from attachments.models import Attachment
 from django.db import transaction
 from django.utils import timezone
+from rest_framework import serializers
+
+from attachments.models import Attachment
+from attachments.serializers import SimpleAttachmentSerializer
+from events.models import Event
+from organizations.serializers import SimpleOrganizationSerializer
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -25,17 +26,19 @@ class EventSerializer(serializers.ModelSerializer):
             "end_date",
         ]
         read_only_fields = ["start_date"]
-        
+
     def validate(self, attrs):
         organization = self.context.get("organization")
         print(organization)
-        
+
         if attrs["end_date"] <= timezone.now():
             raise serializers.ValidationError("End date must be in the future.")
-        
+
         if organization.kpay_qr_url is None or organization.phone_number is None:
-            raise serializers.ValidationError("Organization is not set up properly yet to create events.")
-        
+            raise serializers.ValidationError(
+                "Organization is not set up properly yet to create events."
+            )
+
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -46,9 +49,8 @@ class EventSerializer(serializers.ModelSerializer):
                 Attachment.objects.create(content_object=event, file=attachment)
 
             return event
-        
-    
-        
+
+
 class SimpleEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event

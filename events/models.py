@@ -1,5 +1,6 @@
 from django.db import models
-from core.models import BaseModel, AttachableModel
+
+from core.models import AttachableModel, BaseModel
 from events.constants import EventStatusChoices
 from organizations.models import Organization
 

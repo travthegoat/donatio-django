@@ -8,26 +8,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0002_event_status'),
-        ('organizations', '0002_organization_kpay_qr_url_organization_type_and_more'),
-        ('transactions', '0003_transaction_title'),
+        ("events", "0002_event_status"),
+        ("organizations", "0002_organization_kpay_qr_url_organization_type_and_more"),
+        ("transactions", "0003_transaction_title"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='transaction',
-            name='donor',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to=settings.AUTH_USER_MODEL),
+            model_name="transaction",
+            name="donor",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="transactions",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='transaction',
-            name='event',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='events.event'),
+            model_name="transaction",
+            name="event",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="transactions",
+                to="events.event",
+            ),
         ),
         migrations.AlterField(
-            model_name='transaction',
-            name='organization',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='organizations.organization'),
+            model_name="transaction",
+            name="organization",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="transactions",
+                to="organizations.organization",
+            ),
         ),
     ]

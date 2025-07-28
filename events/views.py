@@ -1,15 +1,15 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
 
+from core.permissions import IsOrgAdmin
+from events.constants import EventStatusChoices
 from events.models import Event
 from events.serializers import EventSerializer
-from events.constants import EventStatusChoices
 from organizations.models import Organization
-from core.permissions import IsOrgAdmin
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -30,14 +30,14 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return Event.objects.filter(organization=self.kwargs.get("organization_pk"))
         return super().get_queryset()
-    
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        
+
         organization_pk = self.kwargs.get("organization_pk")
         self.organization = get_object_or_404(Organization, pk=organization_pk)
         context["organization"] = self.organization
-        
+
         return context
 
     def perform_create(self, serializer):

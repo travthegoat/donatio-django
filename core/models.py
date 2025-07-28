@@ -1,7 +1,7 @@
 from uuid import uuid4
 
-from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db import models
 
 
 class BaseModel(models.Model):

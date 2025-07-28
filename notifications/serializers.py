@@ -1,7 +1,9 @@
-from rest_framework import serializers
-from .models import Notification
-from organizations.models import Organization
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+from organizations.models import Organization
+
+from .models import Notification
 
 
 class NotificationReadSerializer(serializers.ModelSerializer):

@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand
-from django.core import management
-from allauth.account.models import EmailAddress
-from accounts.models import User, Profile
 import random
+
+from allauth.account.models import EmailAddress
+from django.core import management
+from django.core.management.base import BaseCommand
+
+from accounts.models import Profile, User
 
 
 class Command(BaseCommand):
@@ -29,7 +31,11 @@ class Command(BaseCommand):
         management.call_command("migrate")
         self.stdout.write("")
 
-        self.stdout.write(self.style.NOTICE("Step 2: Creating users with verified emails & profiles..."))
+        self.stdout.write(
+            self.style.NOTICE(
+                "Step 2: Creating users with verified emails & profiles..."
+            )
+        )
         self.stdout.write("=" * 50)
         self.create_users()
         self.stdout.write("")
@@ -55,7 +61,7 @@ class Command(BaseCommand):
                 "is_superuser": True,
                 "is_staff": True,
                 "full_name": "Super Admin",
-                "phone_number": "0999999999"
+                "phone_number": "0999999999",
             },
             {
                 "username": "bot1",
@@ -64,7 +70,7 @@ class Command(BaseCommand):
                 "is_superuser": False,
                 "is_staff": False,
                 "full_name": "John Doe",
-                "phone_number": "0912345678"
+                "phone_number": "0912345678",
             },
             {
                 "username": "bot2",
@@ -73,7 +79,7 @@ class Command(BaseCommand):
                 "is_superuser": False,
                 "is_staff": False,
                 "full_name": "Jane Doe",
-                "phone_number": "0987654321"
+                "phone_number": "0987654321",
             },
         ]
 
@@ -84,33 +90,45 @@ class Command(BaseCommand):
                     "email": user_data["email"],
                     "is_staff": user_data["is_staff"],
                     "is_superuser": user_data["is_superuser"],
-                }
+                },
             )
 
             if created:
                 user.set_password(user_data["password"])
                 user.save()
-                self.stdout.write(self.style.SUCCESS(f"✅ Created user '{user.username}'"))
+                self.stdout.write(
+                    self.style.SUCCESS(f"✅ Created user '{user.username}'")
+                )
 
             else:
-                self.stdout.write(self.style.WARNING(f"⚠️ User '{user.username}' already exists"))
+                self.stdout.write(
+                    self.style.WARNING(f"⚠️ User '{user.username}' already exists")
+                )
 
             # Ensure verified email
             email_obj, email_created = EmailAddress.objects.get_or_create(
                 user=user,
                 email=user.email,
-                defaults={"verified": True, "primary": True}
+                defaults={"verified": True, "primary": True},
             )
 
             if not email_created and not email_obj.verified:
                 email_obj.verified = True
                 email_obj.primary = True
                 email_obj.save()
-                self.stdout.write(self.style.SUCCESS(f"📨 Verified email for '{user.username}'"))
+                self.stdout.write(
+                    self.style.SUCCESS(f"📨 Verified email for '{user.username}'")
+                )
             elif email_created:
-                self.stdout.write(self.style.SUCCESS(f"📨 Email added and verified for '{user.username}'"))
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"📨 Email added and verified for '{user.username}'"
+                    )
+                )
             else:
-                self.stdout.write(self.style.NOTICE(f"✔️ Email already verified for '{user.username}'"))
+                self.stdout.write(
+                    self.style.NOTICE(f"✔️ Email already verified for '{user.username}'")
+                )
 
             # Ensure profile
             profile, profile_created = Profile.objects.get_or_create(
@@ -118,9 +136,15 @@ class Command(BaseCommand):
                 defaults={
                     "full_name": user_data["full_name"],
                     "phone_number": user_data["phone_number"],
-                }
+                },
             )
             if profile_created:
-                self.stdout.write(self.style.SUCCESS(f"👤 Profile created for '{user.username}'"))
+                self.stdout.write(
+                    self.style.SUCCESS(f"👤 Profile created for '{user.username}'")
+                )
             else:
-                self.stdout.write(self.style.NOTICE(f"👤 Profile already exists for '{user.username}'"))
+                self.stdout.write(
+                    self.style.NOTICE(
+                        f"👤 Profile already exists for '{user.username}'"
+                    )
+                )

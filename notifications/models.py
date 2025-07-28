@@ -1,7 +1,9 @@
-from django.db import models
-from core.models import BaseModel
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
+from core.models import BaseModel
+
 from .constants import NotificationType
 
 

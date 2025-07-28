@@ -1,11 +1,13 @@
-from rest_framework import serializers
-from .models import Transaction
-from attachments.serializers import SimpleAttachmentSerializer
 from django.db import transaction as db_transaction
-from .constants import TransactionType, TransactionStatus
-from organizations.serializers import SimpleOrganizationSerializer
+from rest_framework import serializers
+
 from accounts.serializers import SimpleUserSerializer
+from attachments.serializers import SimpleAttachmentSerializer
 from events.serializers import SimpleEventSerializer
+from organizations.serializers import SimpleOrganizationSerializer
+
+from .constants import TransactionStatus, TransactionType
+from .models import Transaction
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -69,21 +71,28 @@ class TransactionSerializer(serializers.ModelSerializer):
 
         if attrs["type"] == TransactionType.DISBURSEMENT:
             if organization.admin != actor:
-                raise serializers.ValidationError("You are not authorized to create disbursement transactions for this organization.")
+                raise serializers.ValidationError(
+                    "You are not authorized to create disbursement transactions for this organization."
+                )
 
             if attrs.get("event") is not None:
-                raise serializers.ValidationError("Disbursement transactions cannot be associated with an event.")
+                raise serializers.ValidationError(
+                    "Disbursement transactions cannot be associated with an event."
+                )
 
             title = attrs.get("title")
             if not title or title.strip() == "":
-                raise serializers.ValidationError("Title is required for disbursements.")
+                raise serializers.ValidationError(
+                    "Title is required for disbursements."
+                )
 
         elif attrs["type"] == TransactionType.DONATION:
             if not organization.kpay_qr_url or not organization.phone_number:
-                raise serializers.ValidationError("Organization is not set up properly yet to accept donations.")
+                raise serializers.ValidationError(
+                    "Organization is not set up properly yet to accept donations."
+                )
 
         return super().validate(attrs)
-
 
 
 class UpdateTransactionSerializer(serializers.ModelSerializer):

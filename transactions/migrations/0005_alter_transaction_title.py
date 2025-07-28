@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transactions', '0004_alter_transaction_donor_alter_transaction_event_and_more'),
+        (
+            "transactions",
+            "0004_alter_transaction_donor_alter_transaction_event_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='transaction',
-            name='title',
+            model_name="transaction",
+            name="title",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
     ]

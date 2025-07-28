@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from organizations.serializers import SimpleOrganizationSerializer
-from .models import Chat, ChatMessage
 from accounts.serializers import CustomUserDetailsSerializer
+from organizations.serializers import SimpleOrganizationSerializer
+
+from .models import Chat, ChatMessage
 
 
 class ChatSerializer(serializers.ModelSerializer):

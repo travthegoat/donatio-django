@@ -1,9 +1,11 @@
-from django.db import models
-from core.models import BaseModel, AttachableModel
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db import models
+
+from attachments.models import Attachment
+from core.models import AttachableModel, BaseModel
 from organizations.models import Organization
 from transactions.models import Transaction
-from attachments.models import Attachment
+
 
 class Activity(BaseModel, AttachableModel):
     organization = models.ForeignKey(
@@ -23,9 +25,14 @@ class Activity(BaseModel, AttachableModel):
     def __str__(self):
         return self.title
 
+
 class ActivityTransaction(BaseModel):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='transaction_links')
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name='activity_links')
+    activity = models.ForeignKey(
+        Activity, on_delete=models.CASCADE, related_name="transaction_links"
+    )
+    transaction = models.ForeignKey(
+        Transaction, on_delete=models.CASCADE, related_name="activity_links"
+    )
     linked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -1,7 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import OrganizationRequest, Organization
+
 from .constants import OrganizationRequestStatus
+from .models import Organization, OrganizationRequest
 
 
 # When an organization request is approved, create an organization

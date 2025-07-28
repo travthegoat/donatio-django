@@ -1,7 +1,7 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
-from core.models import BaseModel, AttachableModel
+from core.models import AttachableModel, BaseModel
 
 from .constants import OrganizationRequestStatus
 

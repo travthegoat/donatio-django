@@ -1,10 +1,12 @@
-from django.db import transaction as db_transaction
-from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
-from .models import Activity, ActivityTransaction
+from django.core.exceptions import ValidationError
+from django.db import transaction as db_transaction
+
+from attachments.models import Attachment
 from organizations.models import Organization
 from transactions.models import Transaction
-from attachments.models import Attachment
+
+from .models import Activity, ActivityTransaction
 
 
 def create_activity(
