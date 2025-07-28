@@ -27,9 +27,17 @@ class ActivityViewSet(viewsets.ModelViewSet):
             return Activity.objects.filter(organization=self.kwargs.get("organization_pk"))
         return super().get_queryset()
     
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        
+        organization_pk = self.kwargs.get("organization_pk")
+        self.organization = get_object_or_404(Organization, pk=organization_pk)
+        context["organization"] = self.organization
+        
+        return context
+    
     def perform_create(self, serializer):
-        organization = get_object_or_404(Organization, id=self.kwargs.get("organization_pk"))
-        serializer.save(organization=organization)
+        serializer.save(organization=self.organization)
         
 class ActivityListViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all()

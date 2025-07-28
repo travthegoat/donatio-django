@@ -30,12 +30,22 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return Event.objects.filter(organization=self.kwargs.get("organization_pk"))
         return super().get_queryset()
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        
+        organization_pk = self.kwargs.get("organization_pk")
+        self.organization = get_object_or_404(Organization, pk=organization_pk)
+        context["organization"] = self.organization
+        
+        return context
 
     def perform_create(self, serializer):
-        organization = get_object_or_404(
-            Organization, id=self.kwargs.get("organization_pk")
+        organization = self.organization
+        serializer.save(
+            organization=organization,
+            start_date=timezone.now(),
         )
-        serializer.save(organization=organization, start_date=timezone.now())
 
 
 class EventListViewSet(viewsets.ModelViewSet):

@@ -54,6 +54,14 @@ class ActivityDetailSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['created_at', 'updated_at', 'activity_transactions', 'attachments', 'organization']
         
+    def validate(self, attrs):
+        organization = self.context.get("organization")
+        
+        if organization.kpay_qr_url is None or organization.phone_number is None:
+            raise serializers.ValidationError("Organization is not set up properly yet to create activities.")
+        
+        return super().validate(attrs)
+        
     def validate_transaction_ids(self, value):
         # Check for duplicate transaction IDs
         if len(value) != len(set(value)):
