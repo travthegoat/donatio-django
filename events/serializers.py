@@ -11,6 +11,12 @@ from organizations.serializers import SimpleOrganizationSerializer
 class EventSerializer(serializers.ModelSerializer):
     organization = SimpleOrganizationSerializer(read_only=True)
     attachments = SimpleAttachmentSerializer(read_only=True, many=True)
+    
+    uploaded_attachments = serializers.ListField(
+        child=serializers.FileField(),
+        write_only=True,
+        required=False
+    )
 
     class Meta:
         model = Event
@@ -24,6 +30,7 @@ class EventSerializer(serializers.ModelSerializer):
             "attachments",
             "start_date",
             "end_date",
+            "uploaded_attachments",
         ]
         read_only_fields = ["start_date"]
 

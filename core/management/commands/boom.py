@@ -45,7 +45,7 @@ class Command(BaseCommand):
         self.stdout.write("")
         self.stdout.write(self.style.NOTICE("Step 3: Starting development server..."))
         self.stdout.write("=" * 50)
-        management.call_command("runserver")
+        management.call_command("runserver", "0.0.0.0:8000")
 
     def print_banner(self, title):
         self.stdout.write("\n" + "=" * 60)
