@@ -1,19 +1,6 @@
 version: "3.9"
 
 services:
-  db:
-    image: postgres:latest
-    container_name: donatio-db
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: donatio
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   donatio_backend:
     build: .
     container_name: donatio-backend
@@ -21,10 +8,3 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    environment: 
-      DATABASE_URL: postgres://postgres:postgres@db:5432/donatio
-    depends_on: 
-      - db
-      
-volumes:
-  postgres_data:
