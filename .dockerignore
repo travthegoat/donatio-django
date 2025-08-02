@@ -31,5 +31,7 @@ docker-compose.override.yml
 *.swp
 .DS_Store
 
+.venv/
+
 # Tests (optional, if you don't want them in the image)
 tests/

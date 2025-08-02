@@ -11,6 +11,7 @@ from organizations.serializers import SimpleOrganizationSerializer
 class EventSerializer(serializers.ModelSerializer):
     organization = SimpleOrganizationSerializer(read_only=True)
     attachments = SimpleAttachmentSerializer(read_only=True, many=True)
+    current_amount = serializers.SerializerMethodField(read_only=True)
     
     uploaded_attachments = serializers.ListField(
         child=serializers.FileField(),
@@ -27,6 +28,7 @@ class EventSerializer(serializers.ModelSerializer):
             "status",
             "description",
             "target_amount",
+            "current_amount",
             "attachments",
             "start_date",
             "end_date",
@@ -57,6 +59,8 @@ class EventSerializer(serializers.ModelSerializer):
 
             return event
 
+    def get_current_amount(self, obj):
+        return obj.transactions.aggregate(Sum("amount")).get("amount__sum", 0)
 
 class SimpleEventSerializer(serializers.ModelSerializer):
     class Meta:
