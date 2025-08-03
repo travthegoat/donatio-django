@@ -42,3 +42,5 @@ EXPOSE 8000
 
 # Run your Django management command through uv
 CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+#start
