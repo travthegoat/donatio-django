@@ -1,3 +1,4 @@
+from sched import Event
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -62,15 +63,18 @@ class TransactionViewSet(viewsets.ModelViewSet):
         # Access validated data safely
         transaction_type = serializer.validated_data.get("type")
         amount = serializer.validated_data.get("amount")
+        event = None
         # Auto-set title if donation and no title provided
         if transaction_type == TransactionType.DONATION:
             serializer.validated_data["title"] = (
                 f"{self.request.user.username} donated {amount}"
             )
+            event = get_object_or_404(Event, pk=request.data.get("event"))
 
         serializer.save(
             organization=self.organization,
             actor=self.request.user,
+            event=event
         )
 
     def perform_destroy(self, instance):
