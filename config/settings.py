@@ -11,6 +11,16 @@ env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, ""),
     ALLOWED_HOSTS=(list, []),
+
+    DB_ENGINE=(str, 'django.db.backends.postgresql'),
+    DB_NAME=(str, ''),
+    DB_USER=(str, ''),
+    DB_PASSWORD=(str, ''),
+    DB_HOST=(str, ''),
+    DB_PORT=(str, '5432'),
+    GOOGLE_APP_PASSWORD=(str,''),
+    GOOGLE_CLIENT_ID=(str,'')
+
 )
 
 # Read .env file
@@ -107,12 +117,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     #  "default": dj_database_url.config(env('DATABASE_URL'))
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  
-        'NAME': 'donatio',                          
-        'USER': 'postgres',                         
-        'PASSWORD': 'postgres',                     
-        'HOST': 'postgres-donatio-service',         
-        'PORT': '5432',                            
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),                           
     }
 }
 

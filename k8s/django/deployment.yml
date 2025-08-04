@@ -24,6 +24,8 @@ spec:
           env:
             - name: DEBUG
               value: "1"
+            - name: DB_HOST
+              value: "postgres-donatio-service"
             - name: DJANGO_ALLOWED_HOSTS
               value: "localhost,127.0.0.1,k8s-donatio-appingre-2c3a1c7d21-661808104.ap-southeast-1.elb.amazonaws.com"
             - name: GOOGLE_CLIENT_ID
@@ -36,11 +38,21 @@ spec:
                 secretKeyRef:
                   name: django-secret
                   key: GOOGLE_APP_PASSWORD
-            - name: DATABASE_URL
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: django-secret
-                  key: DATABASE_URL
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: DB_NAME
           volumeMounts:
             - name: django-persistent-storage
               mountPath: /app/media
@@ -105,7 +117,9 @@ type: Opaque
 data:
   GOOGLE_CLIENT_ID: ODU0NjY2NTEzMDg2LWhvNjM3MGNmZ3NnNGI5MDQ1bzltbDgwZTAwZGJiNHEucXBzLmdvb2dsZXVzZXJjb250ZW50LmNvbQ==
   GOOGLE_APP_PASSWORD: amt1eiB0dWVsIG52dWQgbnV5dA==
-  DATABASE_URL: cG9zdGdyZXNxbDovL3Bvc3RncmVzOnBvc3RncmVzQHBvc3RncmVzLWRvbmF0aW8tc2VydmljZTo1NDMyL2RvbmF0aW8=
+  DB_NAME: ZG9uYXRpbw==
+  DB_USER: cG9zdGdyZXM=
+  DB_PASSWORD: cG9zdGdyZXM=
 # image pull secret
 # $PASSWORD = aws ecr get-login-password --region ap-southeast-1
 # aws ecr get-login-password --region ap-southeast-1 | `
