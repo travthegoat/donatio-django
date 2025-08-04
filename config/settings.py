@@ -1,5 +1,5 @@
 from datetime import timedelta
-import dj_database_url
+# import dj_database_url
 
 import environ
 
