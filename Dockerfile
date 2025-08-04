@@ -45,43 +45,20 @@
 
 # #start
 
-
-FROM python:3.12
+FROM python:3.12-slim
 
 WORKDIR /app
 
-# Replace Debian sources.list with Aliyun mirror and install system dependencies
-RUN echo "deb http://mirrors.aliyun.com/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list && \
-    echo "deb http://mirrors.aliyun.com/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
-    echo "deb http://mirrors.aliyun.com/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    build-essential \
-    gcc \
-    libcairo2-dev \
-    pkg-config \
-    libffi-dev \
-    python3-dev \
-    libgirepository1.0-dev \
-    libpango1.0-dev \
-    libgdk-pixbuf2.0-dev \
-    libzbar0 \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip
 RUN pip install --upgrade pip
+RUN pip install uv
 
-# Install uv environment manager
-RUN pip install --no-cache-dir uv
-
-# Copy pyproject.toml and install dependencies via uv
-COPY pyproject.toml . 
+COPY pyproject.toml uv.lock ./
 RUN uv sync
 
-# Copy the rest of your project files
 COPY . .
 
 EXPOSE 8000
 
-# Run Django dev server inside uv virtual environment
-CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
