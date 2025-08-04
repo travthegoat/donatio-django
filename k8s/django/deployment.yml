@@ -37,7 +37,7 @@ spec:
                   name: django-secret
                   key: GOOGLE_APP_PASSWORD
             - name: DATABASE_URL
-              value: "postgresql://postgres:postgres@postgres-donatio-service:5432/donatio"
+              value: postgresql://postgres:postgres@postgres-donatio-service:5432/donatio
           volumeMounts:
             - name: django-persistent-storage
               mountPath: /app/media
@@ -89,3 +89,4 @@ data:
 #   --docker-username=AWS `
 #   --docker-password="$PASSWORD" `
 #   --namespace=donatio
+
