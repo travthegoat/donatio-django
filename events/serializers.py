@@ -6,6 +6,8 @@ from attachments.models import Attachment
 from attachments.serializers import SimpleAttachmentSerializer
 from events.models import Event
 from organizations.serializers import SimpleOrganizationSerializer
+from transactions.constants import TransactionStatus, TransactionType
+from transactions.models import Transaction
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -60,7 +62,11 @@ class EventSerializer(serializers.ModelSerializer):
             return event
 
     def get_current_amount(self, obj):
-        return obj.transactions.aggregate(Sum("amount")).get("amount__sum", 0)
+        return Transaction.objects.filter(
+            event=obj,
+            type=TransactionType.DONATION,
+            status=TransactionStatus.APPROVED
+        ).aggregate(Sum("amount")).get("amount__sum", 0)
 
 class SimpleEventSerializer(serializers.ModelSerializer):
     class Meta:
