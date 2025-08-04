@@ -105,7 +105,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-     "default": dj_database_url.config()
+    #  "default": dj_database_url.config(env('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  
+        'NAME': 'donatio',                          
+        'USER': 'postgres',                         
+        'PASSWORD': 'postgres',                     
+        'HOST': 'postgres-donatio-service',         
+        'PORT': '5432',                            
+    }
 }
 
 
