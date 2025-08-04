@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-donatio
+  labels:
+    app: django-donatio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-donatio
+  template:
+    metadata:
+      labels:
+        app: django-donatio
+    spec:
+      imagePullSecrets:
+        - name: ecr-secret
+      containers:
+        - name: django-donatio
+          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:django_latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DEBUG
+              value: "1"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "localhost,127.0.0.1"
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: django-secret
+                  key: GOOGLE_APP_PASSWORD
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@postgres-donatio-service:5432/donatio"
+          volumeMounts:
+            - name: django-persistent-storage
+              mountPath: /app/media
+      volumes:
+        - name: django-persistent-storage
+          persistentVolumeClaim:
+            claimName: django-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-donatio-service
+spec:
+  selector:
+    app: django-donatio
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: django-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: gp2
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-secret
+type: Opaque
+data:
+  GOOGLE_CLIENT_ID: ODU0NjY2NTEzMDg2LWhvNjM3MGNmZ3NnNGI5MDQ1bzltbDgwZTAwZGJiNHEucXBzLmdvb2dsZXVzZXJjb250ZW50LmNvbQ==
+  GOOGLE_APP_PASSWORD: amt1eiB0dWVsIG52dWQgbnV5dA==
+# image pull secret
+# $PASSWORD = aws ecr get-login-password --region ap-southeast-1
+# aws ecr get-login-password --region ap-southeast-1 | `
+#   kubectl create secret docker-registry ecr-secret `
+#   --docker-server=592867232570.dkr.ecr.ap-southeast-1.amazonaws.com `
+#   --docker-username=AWS `
+#   --docker-password="$PASSWORD" `
+#   --namespace=donatio

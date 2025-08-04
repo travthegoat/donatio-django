@@ -91,16 +91,23 @@
 # xdg==5
 # xkit==0.0.0
 
-Django>=4.2,<5.0
-fastapi>=0.115.14
-langchain-community>=0.3.27
-langchain-core>=0.3.69
-langchain-groq>=0.3.6
-langgraph>=0.5.3
-numpy>=1.26.0
-psycopg2-binary>=2.9.10
-pydantic>=2.11.7
-python-dotenv>=1.1.1
-python-multipart>=0.0.20
-typing-extensions>=4.14.0
-uvicorn>=0.35.0
+
+channels[daphne]>=4.2.2",
+cryptography>=45.0.4",
+dj-database-url>=3.0.1",
+dj-rest-auth>=7.0.1",
+django>=5.2.3",
+django-allauth>=65.9.0",
+django-cleanup>=9.0.0",
+django-cors-headers>=4.7.0",
+django-environ>=0.12.0",
+django-filter>=25.1",
+djangorestframework>=3.16.0",
+djangorestframework-simplejwt>=5.5.0",
+drf-nested-routers>=0.94.2",
+pillow>=11.3.0",
+psycopg2-binary>=2.9.10",
+pyzbar>=0.1.9",
+requests>=2.32.4",
+ruff>=0.12.1",
+uvicorn>=0.35.0",
