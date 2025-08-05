@@ -27,7 +27,7 @@ spec:
             - name: DB_HOST
               value: "postgres-donatio-service"
             - name: DJANGO_ALLOWED_HOSTS
-              value: "localhost,127.0.0.1,k8s-donatio-appingre-2c3a1c7d21-661808104.ap-southeast-1.elb.amazonaws.com"
+              value: "localhost,127.0.0.1,k8s-donatio-djangodo-16b6aeea73-839fa8201c4f675d.elb.ap-southeast-1.amazonaws.com"
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
