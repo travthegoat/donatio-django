@@ -15,8 +15,7 @@ __pycache__/
 # Node modules (if you have any frontend stuff)
 node_modules/
 
-# Static files (usually collected at build or runtime)
-staticfiles/
+
 
 # Logs
 *.log
