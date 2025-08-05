@@ -64,6 +64,8 @@ RUN uv sync
 
 COPY . .
 
+RUN uv run python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
 CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

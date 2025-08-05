@@ -21,13 +21,10 @@ spec:
           image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
           ports:
             - containerPort: 8000
+          envFrom:
+            - configMapRef:
+              name: django-env
           env:
-            - name: DEBUG
-              value: "1"
-            - name: DB_HOST
-              value: "postgres-donatio-service"
-            - name: DJANGO_ALLOWED_HOSTS
-              value: "localhost,0.0.0.0,[::1],127.0.0.1,k8s-donatio-appingre-2c3a1c7d21-1673284960.ap-southeast-1.elb.amazonaws.com"
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -120,6 +117,16 @@ data:
   DB_NAME: ZG9uYXRpbw==
   DB_USER: cG9zdGdyZXM=
   DB_PASSWORD: cG9zdGdyZXM=
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-env
+data:
+  DJANGO_ALLOWED_HOSTS: "localhost,0.0.0.0,[::1],127.0.0.1,k8s-donatio-appingre-2c3a1c7d21-1673284960.ap-southeast-1.elb.amazonaws.com"
+  DEBUG: "1"
+  DB_HOST: "postgres-donatio-service"
 # image pull secret
 # $PASSWORD = aws ecr get-login-password --region ap-southeast-1
 # aws ecr get-login-password --region ap-southeast-1 | `
