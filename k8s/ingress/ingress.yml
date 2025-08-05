@@ -10,15 +10,19 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - http:
+    - host: api.donatio.com
+      http:
         paths:
-          - path: /admin
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: django-donatio-service
                 port:
                   number: 8000
+    - host: ai.donatio.com
+      http:
+        paths:
           - path: /
             pathType: Prefix
             backend:
