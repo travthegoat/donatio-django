@@ -36,5 +36,9 @@ jobs:
       - name: Push Image to Amazon ECR
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/eks-cluster/donatio:${{ github.sha }}
+    
+      - name: Update deployment image
+        run: |
+         kubectl set image deployment/django-donatio django-donatio=592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${{ github.sha }}
 
           

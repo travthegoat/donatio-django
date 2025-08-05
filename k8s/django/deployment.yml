@@ -18,7 +18,7 @@ spec:
         - name: ecr-secret
       containers:
         - name: django-donatio
-          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:django_latest
+          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
           ports:
             - containerPort: 8000
           env:
@@ -98,7 +98,7 @@ spec:
     spec:
       containers:
         - name: migrate
-          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:django_latest
+          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
           command: ["uv", "run", "python", "manage.py", "migrate"]
           env:
             - name: DATABASE_URL
