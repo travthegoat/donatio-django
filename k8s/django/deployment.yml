@@ -89,24 +89,24 @@ spec:
   storageClassName: gp2
 
 ---
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: django-migrate
-spec:
-  template:
-    spec:
-      containers:
-        - name: migrate
-          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
-          command: ["uv", "run", "python", "manage.py", "migrate"]
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: django-secret
-                  key: DATABASE_URL
-      restartPolicy: OnFailure
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: django-migrate
+# spec:
+#   template:
+#     spec:
+#       containers:
+#         - name: migrate
+#           image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
+#           command: ["uv", "run", "python", "manage.py", "migrate"]
+#           env:
+#             - name: DATABASE_URL
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: django-secret
+#                   key: DATABASE_URL
+#       restartPolicy: OnFailure
 
 ---
 apiVersion: v1
