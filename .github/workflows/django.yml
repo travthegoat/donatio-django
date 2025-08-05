@@ -31,7 +31,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build Django Backend Image
         run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/eks-cluster/donatio:django_latest .
+          docker build --no-cache -t ${{ steps.login-ecr.outputs.registry }}/eks-cluster/donatio:django_latest .
 
       - name: Push Image to Amazon ECR
         run: |
