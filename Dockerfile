@@ -64,7 +64,6 @@ RUN uv sync
 
 COPY . .
 
-RUN uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
