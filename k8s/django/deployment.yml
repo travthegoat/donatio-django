@@ -18,7 +18,7 @@ spec:
         - name: ecr-secret
       containers:
         - name: django-donatio
-          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:${TAG}
+          image: 592867232570.dkr.ecr.ap-southeast-1.amazonaws.com/eks-cluster/donatio:latest
           ports:
             - containerPort: 8000
           envFrom:
