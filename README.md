@@ -1,5 +1,7 @@
 # Donatio - A Transparent Donation Platform For Myanmar
 
+![Alt text](https://github.com/one-project-one-month/donaito-django/blob/main/donatioMain.png?raw=true)
+
 A web platform designed to bring transparency and trust to charitable giving in Myanmar.
 It empowers organizations to showcase their work and donors to see exactly where their contributions go, fostering a stronger connection between communities and causes.
 
