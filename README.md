@@ -1,131 +1,62 @@
-# Donatio-Backend
+# Donatio - A Transparent Donation Platform For Myanmar
 
-A Transparent Donation Platform for Myanmar 🇲🇲
-
----
-
-## 📁 Project Structure Suggestion
-
-To keep things organized, create a parent folder and clone all Donatio-related repos inside:
-
-```bash
-mkdir Donatio && cd Donatio
-
-# Clone backend repo
-git clone https://github.com/Technortal-Assemble/Donatio-Backend.git
-
-# You can also clone other repos here later
-# git clone https://github.com/Technortal-Assemble/Donatio-Frontend.git
-# git clone https://github.com/Technortal-Assemble/Donatio-AI.git
-```
+A web platform designed to bring transparency and trust to charitable giving in Myanmar.
+It empowers organizations to showcase their work and donors to see exactly where their contributions go, fostering a stronger connection between communities and causes.
 
 ---
 
-## ⚙️ Tech Stack
 
-- **Backend**: Django
-- **Dependency Manager**: [uv](https://github.com/astral-sh/uv)
-- **Formatter & Linter**: [ruff](https://docs.astral.sh/ruff/)
+## ✨ What features are included?
 
----
+- 🏛️ Public organization profiles (events & activities)
+- 👤 User accounts with donation history
+- 📰 Real-time feeds for events and activities
+- 💰 Digital donation tracking with payment history
+- 💬 Chat system between users and organizations
+- 🛠️ Admin dashboard for user/org management and reports
+- 🤖 Platform-wide AI chatbot for support
 
-## 🚀 Getting Started
-
-### 1. Clone the backend repo
-
-```bash
-cd Donatio
-git clone https://github.com/Technortal-Assemble/Donatio-Backend.git
-cd Donatio-Backend
-```
-
-### 2. Install `uv`
-
-#### On macOS / Linux
-
-```bash
-curl -Ls https://astral.sh/uv/install.sh | sh
-```
-
-#### On Windows (PowerShell)
-
-```powershell
-irm https://astral.sh/uv/install.ps1 | iex
-```
-
-Make sure `uv` is added to your system `PATH`.
 
 ---
 
-## 🔐 Environment Setup
+## 🛠 Tech Stack
 
-Create your own `.env` file from the example:
+### Frontend:
 
-```bash
-cp .env.example .env
-```
+- Next.js – React-based framework for fast, SEO-friendly UI.
+- Tailwind CSS – Utility-first styling.
 
-Edit `.env` to match your local database and secret key setup.
+### Backend:
 
----
+- Django REST Framework – API backend.
+- WebSockets – Real-time communication.
 
-## 📦 Dependency Management with `uv`
+### AI & Chatbot:
 
-### Sync all dependencies (from `pyproject.toml`)
+- LangChain – Conversational AI framework.
+- LangGraph – Advanced conversational state handling.
 
-```bash
-uv sync
-```
+### Database:
 
-### Add new packages
+- PostgreSQL
 
-```bash
-uv add <package-name>
-# Example:
-uv add django-environ
-```
+### Tools:
 
-`uv` will update your `pyproject.toml` and keep everything locked.
+- Docker – For containerized local development environment.
 
 ---
 
-## 🛠️ Run the Dev Server
+## 👥 Team Members
 
-```bash
-uv run manage.py createsuperuser
-uv run manage.py makemigrations
-uv run manage.py migrate
-uv run manage.py runserver
-```
-
-You can use `uv run` for **any** Django or Python command.
-
----
-
-## 🧹 Code Quality with `ruff`
-
-Keep your code clean and consistent:
-
-```bash
-# Format code
-uv run ruff format .
-
-# Check for issues
-uv run ruff check .
-
-# Auto-fix issues
-uv run ruff check . --fix
-```
-
----
-
-## ✅ Summary
-
-| Task                  | Command                            |
-|-----------------------|-------------------------------------|
-| Install deps          | `uv sync`                           |
-| Add a package         | `uv add <package>`                  |
-| Run Django commands   | `uv run manage.py <command>`        |
-| Format code           | `uv run ruff format .`              |
-| Check linting issues  | `uv run ruff check .`               |
-| Fix linting issues    | `uv run ruff check . --fix`         |
+| Avatar | Name | Role | GitHub |
+|--------|------|------|--------|
+| <img src="https://github.com/Direwen.png" width="50" height="50" style="border-radius:50%;"> | **Min Sik Hein (Direwen)** | Backend Developer | [@Direwen](https://github.com/Direwen) |
+| <img src="https://github.com/travthegoat.png" width="50" height="50" style="border-radius:50%;"> | **Khant Thit Oo** | Backend Developer | [@travthegoat](https://github.com/travthegoat) | 
+| <img src="https://github.com/EriThinMyat.png" width="50" height="50" style="border-radius:50%;"> | **Aye Thin Myat** | Backend Developer | [@EriThinMyat](https://github.com/EriThinMyat) |
+| <img src="https://github.com/ducothepaladin.png" width="50" height="50" style="border-radius:50%;"> | **Wai Yan Lin** | Frontend Developer | [@ducothepaladin](https://github.com/ducothepaladin) |
+| <img src="https://github.com/tom2811.png" width="50" height="50" style="border-radius:50%;"> | **Oak Soe Thein** | Frontend Developer | [@tom2811](https://github.com/tom2811) |
+| <img src="https://github.com/HtetAungLw1n.png" width="50" height="50" style="border-radius:50%;"> | **Htet Aung Lwin** | Frontend Developer | [@HtetAungLw1n](https://github.com/HtetAungLw1n) |
+| <img src="https://github.com/EgonLh.png" width="50" height="50" style="border-radius:50%;"> | **Zay Yar Htun** | Frontend Developer | [@EgonLh](https://github.com/EgonLh) | 
+| <img src="https://github.com/Ye-Bhone-Lin.png" width="50" height="50" style="border-radius:50%;"> | **Ye Bhone Lin** | AI Engineer | [@EgonLh](https://github.com/Ye-Bhone-Lin) | 
+| <img src="https://github.com/MinThihaTun3012.png" width="50" height="50" style="border-radius:50%;"> | **Min Thiha Tun** | AI Engineer | [@MinThihaTun3012](https://github.com/MinThihaTun3012) | 
+| <img src="https://github.com/yourusername.png" width="50" height="50" style="border-radius:50%;"> | **Kaung Htike San** | UI/UX Designer | [@](https://github.com/) | 
