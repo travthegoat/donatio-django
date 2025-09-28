@@ -15,8 +15,6 @@ __pycache__/
 # Node modules (if you have any frontend stuff)
 node_modules/
 
-
-
 # Logs
 *.log
 
