@@ -28,6 +28,7 @@ class Command(BaseCommand):
         self.stdout.write("")
         self.stdout.write(self.style.NOTICE("Step 1: Applying migrations..."))
         self.stdout.write("=" * 50)
+        management.call_command("makemigrations")
         management.call_command("migrate")
         self.stdout.write("")
 
@@ -39,18 +40,6 @@ class Command(BaseCommand):
         self.stdout.write("=" * 50)
         self.create_users()
         self.stdout.write("")
-
-        self.print_banner("LAUNCHING DONATIO SERVER")
-        self.stdout.write(self.style.NOTICE(random.choice(self.JOKES)))
-        self.stdout.write("")
-        self.stdout.write(self.style.NOTICE("Step 3: Starting development server..."))
-        self.stdout.write("=" * 50)
-        management.call_command("runserver", "0.0.0.0:8000")
-
-    def print_banner(self, title):
-        self.stdout.write("\n" + "=" * 60)
-        self.stdout.write(f"{title.center(60)}")
-        self.stdout.write("=" * 60 + "\n")
 
     def create_users(self):
         users_data = [

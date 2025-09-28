@@ -1,13 +1,8 @@
-version: "3.9"
-
 services:
   donatio-backend:
-    build: .
-    container_name: donatio-backend
-    ports: 
+    image: travthegoat/donatio:latest
+    ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-      - /app/.venv
-  
-
+    restart: always
+    env_file:
+      - .env
