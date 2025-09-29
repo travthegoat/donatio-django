@@ -17,6 +17,3 @@ media/
 
 #sqlite3 database
 db.sqlite3
-
-# docker files
-compose.override.yml

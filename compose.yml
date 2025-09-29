@@ -1,8 +1,10 @@
 services:
   donatio-backend:
-    image: travthegoat/donatio:latest
+    build: .
     ports:
       - "8000:8000"
-    restart: always
+    volumes:
+      - .:/app
+      - /app/venv/
     env_file:
       - .env
