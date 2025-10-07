@@ -23,7 +23,6 @@ class Command(BaseCommand):
     ]
 
     def handle(self, *args, **kwargs):
-        self.print_banner("MIGRATION TIME")
         self.stdout.write(self.style.NOTICE(random.choice(self.JOKES)))
         self.stdout.write("")
         self.stdout.write(self.style.NOTICE("Step 1: Applying migrations..."))
